@@ -166,31 +166,36 @@ function renderPagination(totalPages, currentPage, filterGroup, searchQuery) {
     }
     
     pagination.style.display = 'flex';
-    
-    let html = '';
+    pagination.innerHTML = '';
     
     if (currentPage > 1) {
-        html += `<button class="page-btn" onclick="goToPage(${currentPage - 1}, '${filterGroup}', '${searchQuery}')">‹</button>`;
+        const prevBtn = createPageBtn('‹', currentPage - 1, filterGroup, searchQuery);
+        pagination.appendChild(prevBtn);
     }
     
     for (let i = 1; i <= totalPages; i++) {
+        const btn = createPageBtn(i.toString(), i, filterGroup, searchQuery);
         if (i === currentPage) {
-            html += `<button class="page-btn active">${i}</button>`;
-        } else {
-            html += `<button class="page-btn" onclick="goToPage(${i}, '${filterGroup}', '${searchQuery}')">${i}</button>`;
+            btn.classList.add('active');
         }
+        pagination.appendChild(btn);
     }
     
     if (currentPage < totalPages) {
-        html += `<button class="page-btn" onclick="goToPage(${currentPage + 1}, '${filterGroup}', '${searchQuery}')">›</button>`;
+        const nextBtn = createPageBtn('›', currentPage + 1, filterGroup, searchQuery);
+        pagination.appendChild(nextBtn);
     }
-    
-    pagination.innerHTML = html;
 }
 
-function goToPage(page, filterGroup, searchQuery) {
-    renderArtists(filterGroup, searchQuery, page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+function createPageBtn(text, page, filterGroup, searchQuery) {
+    const btn = document.createElement('button');
+    btn.className = 'page-btn';
+    btn.textContent = text;
+    btn.addEventListener('click', () => {
+        renderArtists(filterGroup, searchQuery, page);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    return btn;
 }
 
 function toggleCard(header) {
