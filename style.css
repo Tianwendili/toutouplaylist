@@ -316,6 +316,10 @@ body {
     transition: max-height 0.4s ease;
 }
 
+.artist-card.expanded .songs-container {
+    max-height: 1000px;
+}
+
 .songs-list {
     border-top: 1px solid #f3f4f6;
 }

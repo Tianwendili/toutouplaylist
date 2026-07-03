@@ -115,7 +115,7 @@ function renderArtists(filterGroup = 'all', searchQuery = '') {
                     <span class="toggle-icon">▼</span>
                 </div>
             </div>
-            <div class="songs-container" style="max-height: 1000px;">
+            <div class="songs-container">
                 <div class="songs-list">
                     ${data.songs.map((song, songIndex) => `
                         <div class="song-item" data-title="${song.title}">
