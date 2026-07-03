@@ -455,6 +455,44 @@ body {
     font-weight: 500;
 }
 
+#pagination {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 40px;
+    padding: 20px;
+}
+
+.page-btn {
+    width: 36px;
+    height: 36px;
+    border: 1px solid #ddd6fe;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #6b7280;
+    transition: all 0.2s ease;
+}
+
+.page-btn:hover {
+    border-color: #8b5cf6;
+    color: #8b5cf6;
+}
+
+.page-btn.active {
+    background: #8b5cf6;
+    border-color: #8b5cf6;
+    color: white;
+}
+
+.page-btn:first-child,
+.page-btn:last-child {
+    width: 36px;
+    font-size: 1.1rem;
+}
+
 .footer a:hover {
     text-decoration: underline;
 }

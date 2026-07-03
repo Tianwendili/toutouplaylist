@@ -1,6 +1,8 @@
 let playlistData = null;
 let artistsData = {};
 let avatarData = {};
+let currentPage = 1;
+const pageSize = 10;
 
 document.addEventListener('DOMContentLoaded', () => {
     loadPlaylist();
@@ -58,10 +60,7 @@ function updateStats() {
     document.getElementById('last-updated').textContent = `更新于 ${updatedAt}`;
 }
 
-function renderArtists(filterGroup = 'all', searchQuery = '') {
-    const container = document.getElementById('artists-container');
-    container.innerHTML = '';
-    
+function getFilteredArtists(filterGroup = 'all', searchQuery = '') {
     let filteredArtists = Object.entries(artistsData);
     
     if (filterGroup !== 'all') {
@@ -81,16 +80,31 @@ function renderArtists(filterGroup = 'all', searchQuery = '') {
         });
     }
     
-    filteredArtists.sort((a, b) => a[0].localeCompare(b[0]));
+    return filteredArtists.sort((a, b) => a[0].localeCompare(b[0]));
+}
+
+function renderArtists(filterGroup = 'all', searchQuery = '', page = 1) {
+    const container = document.getElementById('artists-container');
+    container.innerHTML = '';
+    
+    const filteredArtists = getFilteredArtists(filterGroup, searchQuery);
     
     if (filteredArtists.length === 0) {
         document.getElementById('empty-state').style.display = 'block';
+        document.getElementById('pagination').style.display = 'none';
         return;
     }
     
     document.getElementById('empty-state').style.display = 'none';
     
-    filteredArtists.forEach(([artist, data], index) => {
+    const totalPages = Math.ceil(filteredArtists.length / pageSize);
+    currentPage = Math.max(1, Math.min(page, totalPages));
+    
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    const pageArtists = filteredArtists.slice(startIndex, endIndex);
+    
+    pageArtists.forEach(([artist, data], index) => {
         const card = document.createElement('div');
         card.className = 'artist-card expanded';
         card.style.animationDelay = `${index * 0.05}s`;
@@ -139,6 +153,44 @@ function renderArtists(filterGroup = 'all', searchQuery = '') {
             item.addEventListener('click', () => copySongTitle(item));
         });
     });
+    
+    renderPagination(totalPages, currentPage, filterGroup, searchQuery);
+}
+
+function renderPagination(totalPages, currentPage, filterGroup, searchQuery) {
+    const pagination = document.getElementById('pagination');
+    
+    if (totalPages <= 1) {
+        pagination.style.display = 'none';
+        return;
+    }
+    
+    pagination.style.display = 'flex';
+    
+    let html = '';
+    
+    if (currentPage > 1) {
+        html += `<button class="page-btn" onclick="goToPage(${currentPage - 1}, '${filterGroup}', '${searchQuery}')">‹</button>`;
+    }
+    
+    for (let i = 1; i <= totalPages; i++) {
+        if (i === currentPage) {
+            html += `<button class="page-btn active">${i}</button>`;
+        } else {
+            html += `<button class="page-btn" onclick="goToPage(${i}, '${filterGroup}', '${searchQuery}')">${i}</button>`;
+        }
+    }
+    
+    if (currentPage < totalPages) {
+        html += `<button class="page-btn" onclick="goToPage(${currentPage + 1}, '${filterGroup}', '${searchQuery}')">›</button>`;
+    }
+    
+    pagination.innerHTML = html;
+}
+
+function goToPage(page, filterGroup, searchQuery) {
+    renderArtists(filterGroup, searchQuery, page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function toggleCard(header) {
@@ -184,14 +236,14 @@ function setupEventListeners() {
         searchInput.value = '';
         clearBtn.style.display = 'none';
         const activeTab = document.querySelector('.filter-tab.active');
-        renderArtists(activeTab.dataset.filter, '');
+        renderArtists(activeTab.dataset.filter, '', 1);
     });
     
     filterTabs.forEach(tab => {
         tab.addEventListener('click', () => {
             filterTabs.forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
-            renderArtists(tab.dataset.filter, searchInput.value);
+            renderArtists(tab.dataset.filter, searchInput.value, 1);
         });
     });
 }
@@ -206,7 +258,7 @@ function handleSearch(query) {
     }
     
     const activeTab = document.querySelector('.filter-tab.active');
-    renderArtists(activeTab.dataset.filter, trimmedQuery);
+    renderArtists(activeTab.dataset.filter, trimmedQuery, 1);
 }
 
 function setupScrollListener() {
