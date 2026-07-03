@@ -102,7 +102,7 @@ function renderArtists(filterGroup = 'all', searchQuery = '') {
         const groupName = data.groups[0] ? data.groups[0].replace('系列', '') : '';
         
         card.innerHTML = `
-            <div class="artist-header" onclick="toggleCard(this)">
+            <div class="artist-header">
                 <div class="artist-info">
                     ${avatarImg}
                     <div>
@@ -118,7 +118,7 @@ function renderArtists(filterGroup = 'all', searchQuery = '') {
             <div class="songs-container" style="max-height: 1000px;">
                 <div class="songs-list">
                     ${data.songs.map((song, songIndex) => `
-                        <div class="song-item" data-title="${song.title}" onclick="copySongTitle(this)">
+                        <div class="song-item" data-title="${song.title}">
                             <span class="song-index">${songIndex + 1}</span>
                             <div class="song-info">
                                 <div class="song-title">${song.title}</div>
@@ -130,6 +130,14 @@ function renderArtists(filterGroup = 'all', searchQuery = '') {
             </div>
         `;
         container.appendChild(card);
+        
+        const header = card.querySelector('.artist-header');
+        header.addEventListener('click', () => toggleCard(header));
+        
+        const songItems = card.querySelectorAll('.song-item');
+        songItems.forEach(item => {
+            item.addEventListener('click', () => copySongTitle(item));
+        });
     });
 }
 
