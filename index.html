@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>toutou直播间点歌单</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1 class="title"><span class="title-icon">🎵</span> toutou 歌单</h1>
+            <p class="subtitle"><a href="https://live.bilibili.com/22174924" target="_blank" class="live-link"><img src="data/streamer_avatar.jpg" alt="toutou" class="streamer-avatar"> 主播直播间戳这里</a></p>
+            <div class="stats">
+                <span class="stat-item"><strong id="total-songs">0</strong> 首歌曲</span>
+                <span class="stat-item"><strong id="total-artists">0</strong> 位歌手</span>
+                <span class="stat-item" id="last-updated">更新中...</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="搜索歌曲或歌手..." class="search-input">
+            <button id="search-btn" class="search-btn">搜索</button>
+            <button id="clear-btn" class="clear-btn" style="display: none;">清除</button>
+        </div>
+
+        <div class="filter-tabs">
+            <button class="filter-tab active" data-filter="all"><span class="filter-tab-icon">🎵</span>全部</button>
+            <button class="filter-tab" data-filter="女歌手系列"><span class="filter-tab-icon">👩</span>女歌手</button>
+            <button class="filter-tab" data-filter="男歌手系列"><span class="filter-tab-icon">👨</span>男歌手</button>
+            <button class="filter-tab" data-filter="乐队/组合系列"><span class="filter-tab-icon">🎸</span>乐队</button>
+            <button class="filter-tab" data-filter="少女系列"><span class="filter-tab-icon">✨</span>少女</button>
+            <button class="filter-tab" data-filter="P主系列"><span class="filter-tab-icon">🎹</span>P主</button>
+            <button class="filter-tab" data-filter="Vocaloid系列"><span class="filter-tab-icon">🎤</span>Vocaloid</button>
+        </div>
+
+        <div class="artists-container" id="artists-container">
+        </div>
+
+        <div class="empty-state" id="empty-state" style="display: none;">
+            <div class="empty-icon">🔍</div>
+            <p class="empty-text">没有找到匹配的歌曲</p>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>数据来源：<a href="https://www.bilibili.com/opus/1189914637774094353" target="_blank">B站歌单</a></p>
+        <p>Made with ❤️ for toutou</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
